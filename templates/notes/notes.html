@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的便签</title>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<input type="text" id="mynote">
+<input type="button" id="add_notes" value="添加便笺">
+
+<ul>
+    {% for note in notes %}
+        <li class="note_item">
+            <input {% if note.n_is_done == 1 %}
+                checked="checked"
+            {% endif %} id="{{ note.pk }}" class="choose" type="checkbox">{{ note.n_content }} <input class="del" type="button"
+                                                                                                      value="删除">
+        </li>
+    {% endfor %}
+    {{ no_completed.count }}未完成，{{ completed.count }}已完成，共{{ notes.count }}个
+</ul>
+<script>
+    $(function () {
+
+        $(".note_item .choose").click(function () {
+
+            console.log($(this).prop("checked"), $(this).attr("id"))
+            let is_done = $(this).prop("checked")
+            let pk = $(this).attr("id")
+            $.ajax({
+                url: "{% url 'notes:modify' %}",
+                method: "post",
+                data: {"pk": pk, "is_done": is_done},
+                success: function (data) {
+                    {#alert(data.status)#}
+                    console.log(data.status)
+                    if (data.status == 1) {
+                        window.location.reload()
+                    }
+                }
+            })
+        })
+
+        $(".note_item .del").click(function () {
+
+            let pk = $(this).prev().attr("id")
+            console.log(pk)
+            $.ajax({
+                url: "/notes/del/"+pk,
+                method: "get",
+                success: function (data) {
+                    console.log(data.status)
+                    if (data.status == 1) {
+                        window.location.reload()
+                    }
+                }
+            })
+        })
+
+        $("#add_notes").click(function () {
+            let content = $("#mynote").val()
+            console.log(content)
+            $.ajax({
+                url: "{% url 'notes:add' %}",
+                method: "post",
+                data: {"content": content},
+                success: function (data) {
+                    {#alert(data.status)#}
+                    console.log(data.status)
+                    if (data.status == 1) {
+                        window.location.reload()
+                    }
+                }
+            })
+        })
+
+    })
+</script>
+</body>
+</html>

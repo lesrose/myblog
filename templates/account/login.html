@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+
+</head>
+<body>
+<form action="{% url 'user:login' %}" method="post" id="myform" style="margin: 0 auto">
+    {% csrf_token %}
+    <label>手机号:</label>
+    <input required type="tel" name="u_tel" id="u_tel" value="{{ params.u_tel }}">
+    <br>
+    <label>密码:</label>
+    <input required type="password" name="u_pwd" id="u_password">
+    <br>
+    {{ params.msg }}
+    <br>
+    <input type="button" onclick="confirm()" value="登录">
+    <input type="reset" name="重置">
+</form>
+<a href="{% url "user:register" %}">注册</a>
+<script>
+    function confirm() {
+        let tel = $("#u_tel").val()
+        let regex = /^1[345789]\d{9}$/
+        if (!regex.test(tel)) {
+            alert("手机号输入有误~")
+            return;
+        }
+        let password = $("#u_password").val();
+        let len = password.length;
+        if (len < 6 || len > 20) {
+            alert("密码长度不正确,6-20");
+            return;
+        }
+        document.getElementById("myform").submit()
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>写博客</title>
+</head>
+<body>
+<form action="{% url "blog:add" %}" method="post">
+    {% csrf_token %}
+    <label>标题:</label>
+    <input required type="text" name="title">
+    <br>
+    <label>标签:</label>
+    <input required type="text" name="tags">
+    <br>
+    <label>内容:</label>
+    <textarea required name="content" id="" cols="30" rows="10"></textarea>
+    <br>
+    <input type="submit" value="提交">
+    <input type="reset" value="重置">
+</form>
+</body>
+</html>

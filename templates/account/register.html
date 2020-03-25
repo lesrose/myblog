@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户注册</title>
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+</head>
+<body>
+<form action="{% url 'user:register' %}" method="post" id="myform" style="margin: 0 auto">
+    {% csrf_token %}
+    <label>手机号:</label>
+    <input required type="tel" name="u_tel" id="u_tel" value="{{ param.u_name }}">
+    <br>
+    <label>昵称:</label>
+    <input required type="text" name="u_nike_name" id="u_nike_name" value="{{ param.u_name }}">
+    <br>
+    <label>邮箱:</label>
+    <input required type="email" name="u_email" id="u_email" value="{{ param.u_name }}">
+    <br>
+    <label> 密码:</label>
+    <input required type="password" name="u_pwd" id="u_password">
+    <br>
+    <label>确认密码:</label>
+    <input required type="password" id="u_password2">
+    <br>
+    <input type="button" onclick="confirm()" value="提交">
+    <input type="reset" name="重置">
+</form>
+<script>
+    let form = document.getElementById("myform")
+
+    function confirm() {
+        let tel = $("#u_tel").val()
+        let regex = /^1[345789]\d{9}$/
+        if (!regex.test(tel)) {
+            alert("手机号输入有误~")
+            return;
+        }
+        let email = $("#u_email").val()
+        let re = /^\w+@\w+\.\w+$/
+        if (!re.test(email)) {
+            alert("邮箱格式不正确")
+            return;
+        }
+        let nikename = $("#u_nike_name").val();
+        let nikename_len = nikename.length;
+        if (nikename_len < 6 || nikename_len > 20) {
+            alert("昵称长度不正确,6-20");
+            return;
+        }
+
+        let password = $("#u_password").val();
+        let len = password.length;
+        if (len < 6 || len > 20) {
+            alert("密码长度不正确,6-20");
+            return;
+        }
+        if ($("#u_password").val() != $("#u_password2").val()) {
+            alert("两次密码不一致")
+            return false;
+        } else {
+            form.submit()
+        }
+    }
+
+</script>
+</body>
+</html>
